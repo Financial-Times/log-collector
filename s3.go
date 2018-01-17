@@ -57,10 +57,10 @@ var NewS3Service = func(bucketName string, awsRegion string, prefix string) (S3S
 }
 
 func (s *s3Service) Put(obj string) error {
-	uuid := fmt.Sprintf("%v/%v_%v", s.prefix, string(time.Now().UnixNano()), uuid.New())
+	uuid := fmt.Sprintf("%v/%v_%v", s.prefix, time.Now().UnixNano(), uuid.New())
 	_, err := s.svc.PutObject(&s3.PutObjectInput{
-		Bucket: &s.bucketName,
+		Bucket: aws.String(s.bucketName),
 		Body:   strings.NewReader(obj),
-		Key:    &uuid})
+		Key:    aws.String(uuid)})
 	return err
 }

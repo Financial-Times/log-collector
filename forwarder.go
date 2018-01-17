@@ -97,6 +97,10 @@ func validateConfig() {
 		log.Printf("-bucket=bucket_name\n")
 		os.Exit(1) //If not fail visibly as we are unable to send logs to Splunk
 	}
+	if len(prefix) == 0 { //Check whether -bucket parameter value was provided
+		prefix = "global"
+		log.Printf(`Prefix not specified, using default "%v"\n`, prefix)
+	}
 }
 
 func stripEmptyStrings(eventlist []string) []string {
