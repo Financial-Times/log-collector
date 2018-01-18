@@ -22,7 +22,6 @@ var (
 	batchtimer     int
 	bucket         string
 	awsRegion      string
-	prefix         string
 	br             *bufio.Reader
 	timerChan      = make(chan bool)
 	timestampRegex = regexp.MustCompile("([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(.[0-9]+)?(([Zz])|([+|-]([01][0-9]|2[0-3]):[0-5][0-9]))")
@@ -49,7 +48,7 @@ func main() {
 		}
 	}()
 
-	logDispatch = NewDispatch(bucket, awsRegion, prefix)
+	logDispatch = NewDispatch(bucket, awsRegion, env)
 	logDispatch.Start()
 
 	for {
@@ -96,10 +95,6 @@ func validateConfig() {
 	if len(bucket) == 0 { //Check whether -bucket parameter value was provided
 		log.Printf("-bucket=bucket_name\n")
 		os.Exit(1) //If not fail visibly as we are unable to send logs to Splunk
-	}
-	if len(prefix) == 0 { //Check whether -bucket parameter value was provided
-		prefix = "global"
-		log.Printf(`Prefix not specified, using default "%v"\n`, prefix)
 	}
 }
 
@@ -171,7 +166,6 @@ func init() {
 	flag.IntVar(&batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to Splunk HEC")
 	flag.StringVar(&bucket, "bucketName", "", "S3 bucket for caching failed events")
 	flag.StringVar(&awsRegion, "awsRegion", "", "AWS region for S3")
-	flag.StringVar(&prefix, "prefix", "global", "S3 id prefix for this instance")
 
 	flag.Parse()
 }
