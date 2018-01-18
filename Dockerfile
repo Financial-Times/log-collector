@@ -18,4 +18,4 @@ RUN apk --no-cache --virtual .build-dependencies add git \
 
 WORKDIR /
 
-CMD exec /coco-splunk-http-forwarder -env=$ENV -workers=$WORKERS -buffer=$BUFFER -batchsize=$BATCHSIZE -batchtimer=$BATCHTIMER -bucketName=$BUCKET_NAME -prefix=$PREFIX -awsRegion=$AWS_REGION
+CMD exec /coco-splunk-http-forwarder -env=$ENV -workers=$WORKERS -buffer=$BUFFER -batchsize=$BATCHSIZE -batchtimer=$BATCHTIMER -bucketName=$BUCKET_NAME -awsRegion=$AWS_REGION
