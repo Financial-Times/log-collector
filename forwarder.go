@@ -31,8 +31,8 @@ var (
 func main() {
 	validateConfig()
 
-	log.Printf("Splunk forwarder (workers %v, batchsize %v, batchtimer %v): Started\n", workers, batchsize, batchtimer)
-	defer log.Printf("Splunk forwarder: Stopped\n")
+	log.Printf("Log-collector (workers %v, batchsize %v, batchtimer %v): Started\n", workers, batchsize, batchtimer)
+	defer log.Printf("Log-collector: Stopped\n")
 
 	if br == nil {
 		br = bufio.NewReader(os.Stdin)
@@ -94,7 +94,7 @@ func main() {
 func validateConfig() {
 	if len(bucket) == 0 { //Check whether -bucket parameter value was provided
 		log.Printf("-bucket=bucket_name\n")
-		os.Exit(1) //If not fail visibly as we are unable to send logs to Splunk
+		os.Exit(1) //If not fail visibly as we are unable to send logs to S3
 	}
 }
 
@@ -159,11 +159,11 @@ func processAndEnqueue(eventlist []string) {
 }
 
 func init() {
-	flag.StringVar(&env, "env", "dummy", "environment_tag value")
+	flag.StringVar(&env, "env", "dummy", "Environment tag value")
 	flag.IntVar(&workers, "workers", 8, "Number of concurrent workers")
 	flag.IntVar(&chanBuffer, "buffer", 256, "Channel buffer size")
-	flag.IntVar(&batchsize, "batchsize", 10, "Number of messages to group before delivering to Splunk HEC")
-	flag.IntVar(&batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to Splunk HEC")
+	flag.IntVar(&batchsize, "batchsize", 10, "Number of messages to group (before writing to S3 and delivering to Splunk HEC)")
+	flag.IntVar(&batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to S3")
 	flag.StringVar(&bucket, "bucketName", "", "S3 bucket for caching failed events")
 	flag.StringVar(&awsRegion, "awsRegion", "", "AWS region for S3")
 
