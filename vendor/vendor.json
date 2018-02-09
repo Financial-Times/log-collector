@@ -153,12 +153,6 @@
 			"revisionTime": "2017-11-13T23:54:33Z"
 		},
 		{
-			"checksumSHA1": "/6H1rhQmbq8mEP29pnmLmdwBKUE=",
-			"path": "github.com/cyberdelia/go-metrics-graphite",
-			"revision": "39f87cc3b432bbb898d7c643c0e93cac2bc865ad",
-			"revisionTime": "2016-12-19T23:08:53Z"
-		},
-		{
 			"checksumSHA1": "OFu4xJEIjiI8Suu+j/gabfp+y6Q=",
 			"origin": "github.com/stretchr/testify/vendor/github.com/davecgh/go-spew/spew",
 			"path": "github.com/davecgh/go-spew/spew",
@@ -180,30 +174,17 @@
 			"revisionTime": "2017-11-13T23:54:33Z"
 		},
 		{
-			"checksumSHA1": "Se195FlZ160eaEk/uVx4KdTPSxU=",
+			"checksumSHA1": "RFpz1DEQgszjgy3cK7pg52cgXn8=",
 			"path": "github.com/pborman/uuid",
-			"revision": "e790cca94e6cc75c7064b1332e63811d4aae1a53",
-			"revisionTime": "2017-06-12T15:36:48Z"
+			"revision": "e533369306653d193b93dae055f6083cbf8ba54f",
+			"revisionTime": "2017-11-28T16:27:32Z"
 		},
 		{
-			"checksumSHA1": "zKKp5SZ3d3ycKe4EKMNT0BqAWBw=",
-			"origin": "github.com/stretchr/testify/vendor/github.com/pmezard/go-difflib/difflib",
-			"path": "github.com/pmezard/go-difflib/difflib",
-			"revision": "05e8a0eda380579888eb53c394909df027f06991",
-			"revisionTime": "2017-07-13T16:51:06Z"
-		},
-		{
-			"checksumSHA1": "KAzbLjI9MzW2tjfcAsK75lVRp6I=",
-			"path": "github.com/rcrowley/go-metrics",
-			"revision": "1f30fe9094a513ce4c700b9a54458bbb0c96996c",
-			"revisionTime": "2016-11-28T21:05:44Z"
-		},
-		{
-			"checksumSHA1": "J+ppEq6nYMKxhB9+c+MD1x9UwSc=",
+			"checksumSHA1": "uyVU5fRfEK17QZuODRjeZX8zDqg=",
 			"path": "github.com/stretchr/testify/assert",
-			"revision": "05e8a0eda380579888eb53c394909df027f06991",
-			"revisionTime": "2017-07-13T16:51:06Z"
+			"revision": "87b1dfb5b2fa649f52695dd9eae19abe404a4308",
+			"revisionTime": "2017-12-31T12:27:32Z"
 		}
 	],
-	"rootPath": "github.com/Financial-Times/coco-splunk-http-forwarder"
+	"rootPath": "github.com/Financial-Times/log-collector"
 }

@@ -1,4 +1,5 @@
+*.iml
 .idea
 .project
-/coco-splunk-http-forwarder*
+/log-collector*
 vendor/*/

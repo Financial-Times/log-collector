@@ -1,16 +1,17 @@
-# Coco Splunk Http Forwarder
+# Log Collector
+
+[![Circle CI](https://circleci.com/gh/Financial-Times/log-collector/tree/master.png?style=shield)](https://circleci.com/gh/Financial-Times/log-collector/tree/master)[![Go Report Card](https://goreportcard.com/badge/github.com/Financial-Times/log-collector)](https://goreportcard.com/report/github.com/Financial-Times/log-collector) [![Coverage Status](https://coveralls.io/repos/github/Financial-Times/log-collector/badge.svg)](https://coveralls.io/github/Financial-Times/log-collector)
 
 ## Building
 ```
-CGO_ENABLED=0 go build -a -installsuffix cgo -o coco-splunk-http-forwarder .
+CGO_ENABLED=0 go build -a -installsuffix cgo -o log-collector .
 
-docker build -t coco/coco-splunk-http-forwarder .
+docker build -t coco/log-collector .
 ```
 
 ## Description
-The Splunk forwarder is a golang application that posts a stdin to a provided URL.
-Failed messages are stored in S3 and retried with an exponential backoff mechanism, in parallel to the normal flow.
-Docker images builds a container that forwards the journalctl logs to the Splunk endpoint
+The `log-collector` is a golang application that posts a stdin to S3 in order to be processed by the `resilient-splunk-forwarder`.
+Docker image builds a container that stores the journalctl logs to S3.
  
 ## Usage ex
-e.g. journalctl -f --output=json | ./coco-splunk-http-forwarder -url=$FORWARD_URL
+e.g. journalctl -f --output=json | ./log-collector -env=$ENV -workers=$WORKERS -buffer=$BUFFER -batchsize=$BATCHSIZE -batchtimer=$BATCHTIMER -bucketName=$BUCKET_NAME -awsRegion=$AWS_REGION
