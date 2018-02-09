@@ -23,7 +23,9 @@ var s3Mock = &s3ServiceMock{}
 func (s3 *s3ServiceMock) Put(obj string) error {
 	obj = strings.Replace(obj, "dispatch", "safe", -1)
 	obj = strings.Replace(obj, "error", "dispatch", -1)
+	s3.Lock()
 	s3.cache = append(s3.cache, obj)
+	s3.Unlock()
 	return nil
 }
 
@@ -56,5 +58,10 @@ func Test_Forwarder(t *testing.T) {
 	}
 	time.Sleep(1 * time.Second)
 	out.Close()
-	assert.Equal(t, messageCount/batchsize, len(s3Mock.cache))
+
+	s3Mock.RLock()
+	l := len(s3Mock.cache)
+	s3Mock.RUnlock()
+
+	assert.Equal(t, messageCount/batchsize, l)
 }
