@@ -56,7 +56,7 @@ func Test_Forwarder(t *testing.T) {
 	for i := 0; i < messageCount; i++ {
 		out.Write([]byte(`127.0.0.1 - - [21/Apr/2015:12:15:34 +0000] "GET /eom-file/all/e09b49d6-e1fa-11e4-bb7f-00144feab7de HTTP/1.1" 200 53706 919 919` + "\n"))
 	}
-	time.Sleep(1 * time.Second)
+	time.Sleep(5 * time.Second)
 	out.Close()
 
 	s3Mock.RLock()
