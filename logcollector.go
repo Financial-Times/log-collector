@@ -1,7 +1,10 @@
 package main
 
-import "github.com/Financial-Times/log-collector/forwarder"
+import "flag"
 
 func main() {
-	forwarder.Forward()
+	if !flag.Parsed() {
+		flag.Parse()
+	}
+
 }

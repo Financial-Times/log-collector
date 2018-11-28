@@ -29,6 +29,10 @@ var (
 )
 
 func Forward() {
+	if !flag.Parsed() {
+		flag.Parse()
+	}
+
 	validateConfig()
 
 	log.Printf("Log-collector (workers %v, batchsize %v, batchtimer %v): Started\n", workers, batchsize, batchtimer)
@@ -93,7 +97,7 @@ func Forward() {
 
 func validateConfig() {
 	if len(bucket) == 0 { //Check whether -bucket parameter value was provided
-		log.Printf("-bucket=bucket_name\n")
+		flag.Usage()
 		os.Exit(1) //If not fail visibly as we are unable to send logs to S3
 	}
 }
@@ -166,6 +170,4 @@ func init() {
 	flag.IntVar(&batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to S3")
 	flag.StringVar(&bucket, "bucketName", "", "S3 bucket for caching failed events")
 	flag.StringVar(&awsRegion, "awsRegion", "", "AWS region for S3")
-
-	flag.Parse()
 }

@@ -1,9 +1,8 @@
 package forwarder
 
 import (
-	"flag"
-
 	"bufio"
+	"flag"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"os"

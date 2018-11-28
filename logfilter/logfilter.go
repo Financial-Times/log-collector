@@ -2,6 +2,7 @@ package logfilter
 
 import (
 	"encoding/json"
+	"flag"
 	"io"
 	"os"
 	"regexp"
@@ -81,16 +82,23 @@ var (
 	}
 )
 
-var environmentTag = new(string)
-var dnsAddress = new(string)
+var (
+	environmentTag string
+	dnsAddress     string
+	mc             clusterService
+)
 
-var mc clusterService
+func init() {
+	flag.StringVar(&environmentTag, "env", "dummy", "Environment tag value")
+	flag.StringVar(&dnsAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
+}
 
 func LogFilter() {
-	*environmentTag = os.Getenv("ENV")
-	*dnsAddress = os.Getenv("DNS_ADDRESS")
+	if !flag.Parsed() {
+		flag.Parse()
+	}
 
-	mc = newMonitoredClusterService(*dnsAddress, *environmentTag)
+	mc = newMonitoredClusterService(dnsAddress, environmentTag)
 
 	dec := json.NewDecoder(os.Stdin)
 	enc := json.NewEncoder(os.Stdout)
@@ -177,8 +185,8 @@ func hideAPIKeysInURLQueryParams(msg string) string {
 func munge(m map[string]interface{}, message string) {
 
 	m["platform"] = "up-k8s"
-	if *environmentTag != "" {
-		m["environment"] = *environmentTag
+	if environmentTag != "" {
+		m["environment"] = environmentTag
 	}
 
 	podName := extractPodName(m["CONTAINER_NAME"])
