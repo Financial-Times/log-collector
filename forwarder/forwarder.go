@@ -1,4 +1,4 @@
-package main
+package forwarder
 
 import (
 	"bufio"
@@ -28,7 +28,7 @@ var (
 	logDispatch    Dispatch
 )
 
-func main() {
+func Forward() {
 	validateConfig()
 
 	log.Printf("Log-collector (workers %v, batchsize %v, batchtimer %v): Started\n", workers, batchsize, batchtimer)
