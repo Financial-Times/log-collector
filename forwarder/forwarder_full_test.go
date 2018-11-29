@@ -1,9 +1,7 @@
 package forwarder
 
 import (
-	"flag"
 	"io"
-	"os"
 	"strings"
 	"sync"
 	"testing"
@@ -28,7 +26,7 @@ func (s3 *s3ServiceMock) Put(obj string) error {
 	return nil
 }
 
-func TestMain(m *testing.M) {
+func init() {
 	Env = "dummy"
 	Workers = 8
 	ChanBuffer = 256
@@ -36,13 +34,9 @@ func TestMain(m *testing.M) {
 	Batchtimer = 5
 	Bucket = "testbucket"
 
-	flag.Parse()
-
 	NewS3Service = func(string, string, string) (S3Service, error) {
 		return s3Mock, nil
 	}
-
-	os.Exit(m.Run())
 }
 
 func Test_Forwarder(t *testing.T) {
