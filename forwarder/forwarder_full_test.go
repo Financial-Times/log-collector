@@ -5,6 +5,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -57,11 +58,28 @@ func Test_Forwarder(t *testing.T) {
 	if err := out.Close(); err != nil {
 		assert.Fail(t, "Error closing the pipe writer %v", err)
 	}
-	wg.Wait()
+
+	if waitTimeout(&wg, 2*time.Second) {
+		assert.Fail(t, "Forwarder should have been stopped on pipe close")
+	}
 
 	s3Mock.RLock()
 	l := len(s3Mock.cache)
 	s3Mock.RUnlock()
 
 	assert.Equal(t, messageCount/Batchsize, l)
+}
+
+func waitTimeout(wg *sync.WaitGroup, timeout time.Duration) bool {
+	c := make(chan struct{})
+	go func() {
+		defer close(c)
+		wg.Wait()
+	}()
+	select {
+	case <-c:
+		return false // completed normally
+	case <-time.After(timeout):
+		return true // timed out
+	}
 }
