@@ -96,6 +96,8 @@ spec:
                 TIME=$(date "+%Y-%m-%d %H:%M:%S.%3N"); \
                 echo "Logs will be resumed from: ${TIME}"; \
                 kubectl patch configmap {{ .Values.service.stopTimeConfigmap }} -p "{\"data\": {\"$NODE_NAME\": \"${TIME}\"}}"
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
         ## Needed for running journalctl from the host
         - name: lib64
