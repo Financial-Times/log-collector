@@ -29,12 +29,12 @@ func (s3 *s3ServiceMock) Put(obj string) error {
 }
 
 func TestMain(m *testing.M) {
-	env = "dummy"
-	workers = 8
-	chanBuffer = 256
-	batchsize = 10
-	batchtimer = 5
-	bucket = "testbucket"
+	Env = "dummy"
+	Workers = 8
+	ChanBuffer = 256
+	Batchsize = 10
+	Batchtimer = 5
+	Bucket = "testbucket"
 
 	flag.Parse()
 
@@ -63,5 +63,5 @@ func Test_Forwarder(t *testing.T) {
 	l := len(s3Mock.cache)
 	s3Mock.RUnlock()
 
-	assert.Equal(t, messageCount/batchsize, l)
+	assert.Equal(t, messageCount/Batchsize, l)
 }

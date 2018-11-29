@@ -15,20 +15,20 @@ import (
 )
 
 var (
-	env            string
-	workers        int
-	chanBuffer     int
-	batchsize      int
-	batchtimer     int
-	bucket         string
-	awsRegion      string
+	Env            string
+	Workers        int
+	ChanBuffer     int
+	Batchsize      int
+	Batchtimer     int
+	Bucket         string
+	AwsRegion      string
 	br             *bufio.Reader
 	timerChan      = make(chan bool)
 	timestampRegex = regexp.MustCompile("([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(.[0-9]+)?(([Zz])|([+|-]([01][0-9]|2[0-3]):[0-5][0-9]))")
 	logDispatch    Dispatch
 )
 
-// Forwards the log messages that come from the reader to the configured S3 bucket
+// Forwards the log messages that come from the reader to the configured S3 Bucket
 func Forward(r io.Reader) {
 	if !flag.Parsed() {
 		flag.Parse()
@@ -36,16 +36,16 @@ func Forward(r io.Reader) {
 
 	validateConfig()
 
-	log.Printf("Log-collector (workers %v, batchsize %v, batchtimer %v): Started\n", workers, batchsize, batchtimer)
+	log.Printf("Log-collector (Workers %v, Batchsize %v, Batchtimer %v): Started\n", Workers, Batchsize, Batchtimer)
 	defer log.Printf("Log-collector: Stopped\n")
 
 	if br == nil {
 		br = bufio.NewReader(r)
 	}
 	i := 0
-	eventlist := make([]string, batchsize) //create eventlist slice that is size of -batchsize
-	timerd := time.Duration(batchtimer) * time.Second
-	timer := time.NewTimer(timerd) //create timer object with duration specified by -batchtimer
+	eventlist := make([]string, Batchsize) //create eventlist slice that is size of -Batchsize
+	timerd := time.Duration(Batchtimer) * time.Second
+	timer := time.NewTimer(timerd) //create timer object with duration specified by -Batchtimer
 	go func() {                    //Create go routine for timer that writes into timerChan when it expires
 		for {
 			<-timer.C
@@ -53,30 +53,30 @@ func Forward(r io.Reader) {
 		}
 	}()
 
-	logDispatch = NewDispatch(bucket, awsRegion, env)
+	logDispatch = NewDispatch(Bucket, AwsRegion, Env)
 	logDispatch.Start()
 
 	for {
-		//1. Check whether timer has expired or batchsize exceeded before processing new string
-		select { //set i equal to batchsize to trigger delivery if timer expires prior to batchsize limit is exceeded
+		//1. Check whether timer has expired or Batchsize exceeded before processing new string
+		select { //set i equal to Batchsize to trigger delivery if timer expires prior to Batchsize limit is exceeded
 		case <-timerChan:
 			log.Println("Timer expired. Trigger delivery to S3")
 			eventlist = stripEmptyStrings(eventlist) //remove empty values from slice before writing to channel
-			i = batchsize
+			i = Batchsize
 		default:
 			break
 		}
-		if i >= batchsize { //Trigger delivery if batchsize is exceeded
+		if i >= Batchsize { //Trigger delivery if Batchsize is exceeded
 			processAndEnqueue(eventlist)
-			i = 0 //reset i once batchsize is reached
+			i = 0 //reset i once Batchsize is reached
 			eventlist = nil
-			eventlist = make([]string, batchsize)
+			eventlist = make([]string, Batchsize)
 			timer.Reset(timerd) //Reset timer after message delivery
 		}
 		//2. Process new string after ensuring eventlist has sufficient space
 		str, err := br.ReadString('\n')
 		if err != nil {
-			if err == io.EOF { //Shutdown procedures: process eventlist, close workers
+			if err == io.EOF { //Shutdown procedures: process eventlist, close Workers
 				eventlist = stripEmptyStrings(eventlist) //remove empty values from slice before writing to channel
 				if len(eventlist) > 0 {
 					log.Printf("Processing %v batched messages before exit", len(eventlist))
@@ -89,7 +89,7 @@ func Forward(r io.Reader) {
 		}
 
 		//3. Append event on eventlist
-		if i != batchsize {
+		if i != Batchsize {
 			eventlist[i] = str
 			i++
 		}
@@ -97,7 +97,7 @@ func Forward(r io.Reader) {
 }
 
 func validateConfig() {
-	if len(bucket) == 0 { //Check whether -bucket parameter value was provided
+	if len(Bucket) == 0 { //Check whether -Bucket parameter value was provided
 		flag.Usage()
 		os.Exit(1) //If not fail visibly as we are unable to send logs to S3
 	}
@@ -164,11 +164,11 @@ func processAndEnqueue(eventlist []string) {
 }
 
 func init() {
-	flag.StringVar(&env, "env", "dummy", "Environment tag value")
-	flag.IntVar(&workers, "workers", 8, "Number of concurrent workers")
-	flag.IntVar(&chanBuffer, "buffer", 256, "Channel buffer size")
-	flag.IntVar(&batchsize, "batchsize", 10, "Number of messages to group (before writing to S3 and delivering to Splunk HEC)")
-	flag.IntVar(&batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to S3")
-	flag.StringVar(&bucket, "bucketName", "", "S3 bucket for caching failed events")
-	flag.StringVar(&awsRegion, "awsRegion", "", "AWS region for S3")
+	flag.StringVar(&Env, "env", "dummy", "Environment tag value")
+	flag.IntVar(&Workers, "workers", 8, "Number of concurrent Workers")
+	flag.IntVar(&ChanBuffer, "buffer", 256, "Channel buffer size")
+	flag.IntVar(&Batchsize, "batchsize", 10, "Number of messages to group (before writing to S3 and delivering to Splunk HEC)")
+	flag.IntVar(&Batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to S3")
+	flag.StringVar(&Bucket, "bucketName", "", "S3 Bucket for caching failed events")
+	flag.StringVar(&AwsRegion, "awsRegion", "", "AWS region for S3")
 }
