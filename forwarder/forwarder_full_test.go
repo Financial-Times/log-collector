@@ -5,7 +5,6 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -42,16 +41,23 @@ func init() {
 func Test_Forwarder(t *testing.T) {
 	in, out := io.Pipe()
 
-	go Forward(in)
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	go func() {
+		Forward(in)
+		wg.Done()
+	}()
+
 	messageCount := 100
 	for i := 0; i < messageCount; i++ {
 		out.Write([]byte(`127.0.0.1 - - [21/Apr/2015:12:15:34 +0000] "GET /eom-file/all/e09b49d6-e1fa-11e4-bb7f-00144feab7de HTTP/1.1" 200 53706 919 919` + "\n"))
 	}
-	e := out.Close()
-	if e != nil {
-		assert.Fail(t, "Error closing the pipe writer %v", e)
+
+	if err := out.Close(); err != nil {
+		assert.Fail(t, "Error closing the pipe writer %v", err)
 	}
-	time.Sleep(5 * time.Second)
+	wg.Wait()
 
 	s3Mock.RLock()
 	l := len(s3Mock.cache)
