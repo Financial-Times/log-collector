@@ -25,9 +25,19 @@ RUN BUILDINFO_PACKAGE="${ORG_PATH}/${PROJECT}/vendor/${ORG_PATH}/service-status-
 
 
 # Multi-stage build - copy only the certs and the binary into the image
-FROM scratch
+FROM alpine:3.8
 WORKDIR /
 COPY --from=0 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=0 /artifacts/* /
+
+# Adding the utilities need for running journalctl & kubectl from inside the container.
+ENV KUBECTL_VERSION="v1.11.0"
+
+ADD https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl /usr/local/bin/kubectl
+
+RUN apk add --no-cache bash gawk sed grep bc coreutils jq ca-certificates && \
+  chmod +x /usr/local/bin/kubectl && \
+  # Basic check that kubectl works.
+  kubectl version --client
 
 CMD exec /log-collector -env=$ENV -workers=$WORKERS -buffer=$BUFFER -batchsize=$BATCHSIZE -batchtimer=$BATCHTIMER -bucketName=$BUCKET_NAME -awsRegion=$AWS_REGION -dnsAddress=$DNS_ADDRESS
