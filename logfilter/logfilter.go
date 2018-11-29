@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"flag"
 	"io"
-	"os"
 	"regexp"
 	"strings"
 )
@@ -93,15 +92,16 @@ func init() {
 	flag.StringVar(&dnsAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
 }
 
-func LogFilter() {
+// Filters & enhances the JSON log messages that come into the reader, and writes the resulted log messages to the writer.
+func LogFilter(r io.Reader, w io.Writer) {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
 
 	mc = newMonitoredClusterService(dnsAddress, environmentTag)
 
-	dec := json.NewDecoder(os.Stdin)
-	enc := json.NewEncoder(os.Stdout)
+	dec := json.NewDecoder(r)
+	enc := json.NewEncoder(w)
 	for {
 		m := make(map[string]interface{})
 		err := dec.Decode(&m)

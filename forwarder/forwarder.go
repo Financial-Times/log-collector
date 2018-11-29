@@ -28,7 +28,8 @@ var (
 	logDispatch    Dispatch
 )
 
-func Forward() {
+// Forwards the log messages that come from the reader to the configured S3 bucket
+func Forward(r io.Reader) {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
@@ -39,7 +40,7 @@ func Forward() {
 	defer log.Printf("Log-collector: Stopped\n")
 
 	if br == nil {
-		br = bufio.NewReader(os.Stdin)
+		br = bufio.NewReader(r)
 	}
 	i := 0
 	eventlist := make([]string, batchsize) //create eventlist slice that is size of -batchsize
