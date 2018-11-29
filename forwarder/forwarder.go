@@ -3,11 +3,9 @@ package forwarder
 import (
 	"bufio"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -30,12 +28,6 @@ var (
 
 // Forwards the log messages that come from the reader to the configured S3 Bucket
 func Forward(r io.Reader) {
-	if !flag.Parsed() {
-		flag.Parse()
-	}
-
-	validateConfig()
-
 	log.Printf("Log-collector (Workers %v, Batchsize %v, Batchtimer %v): Started\n", Workers, Batchsize, Batchtimer)
 	defer log.Printf("Log-collector: Stopped\n")
 
@@ -93,13 +85,6 @@ func Forward(r io.Reader) {
 			eventlist[i] = str
 			i++
 		}
-	}
-}
-
-func validateConfig() {
-	if len(Bucket) == 0 { //Check whether -Bucket parameter value was provided
-		flag.Usage()
-		os.Exit(1) //If not fail visibly as we are unable to send logs to S3
 	}
 }
 
@@ -161,14 +146,4 @@ func processAndEnqueue(eventlist []string) {
 		jsonSTRING := writeJSON(eventlist)
 		logDispatch.Enqueue(jsonSTRING)
 	}
-}
-
-func init() {
-	flag.StringVar(&Env, "env", "dummy", "Environment tag value")
-	flag.IntVar(&Workers, "workers", 8, "Number of concurrent Workers")
-	flag.IntVar(&ChanBuffer, "buffer", 256, "Channel buffer size")
-	flag.IntVar(&Batchsize, "batchsize", 10, "Number of messages to group (before writing to S3 and delivering to Splunk HEC)")
-	flag.IntVar(&Batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to S3")
-	flag.StringVar(&Bucket, "bucketName", "", "S3 Bucket for caching failed events")
-	flag.StringVar(&AwsRegion, "awsRegion", "", "AWS region for S3")
 }

@@ -15,10 +15,23 @@ import (
 
 var logsReader io.Reader
 
+func init() {
+	flag.StringVar(&forwarder.Env, "env", "dummy", "Environment tag value")
+	flag.IntVar(&forwarder.Workers, "workers", 8, "Number of concurrent Workers")
+	flag.IntVar(&forwarder.ChanBuffer, "buffer", 256, "Channel buffer size")
+	flag.IntVar(&forwarder.Batchsize, "batchsize", 10, "Number of messages to group (before writing to S3 and delivering to Splunk HEC)")
+	flag.IntVar(&forwarder.Batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to S3")
+	flag.StringVar(&forwarder.Bucket, "bucketName", "", "S3 Bucket for caching failed events")
+	flag.StringVar(&forwarder.AwsRegion, "awsRegion", "", "AWS region for S3")
+	flag.StringVar(&logfilter.DnsAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
+}
+
 func main() {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
+	logfilter.Env = forwarder.Env
+	validateConfig()
 
 	forwarderIn, logFilterOut := io.Pipe()
 	var wg sync.WaitGroup
@@ -38,6 +51,13 @@ func main() {
 	closeWriter(logFilterOut)
 
 	wg.Wait() //wait for forwarder to complete.
+}
+
+func validateConfig() {
+	if len(forwarder.Bucket) == 0 { //Check whether -Bucket parameter value was provided
+		flag.Usage()
+		os.Exit(1) //If not fail visibly as we are unable to send logs to S3
+	}
 }
 
 func launchForwarder(forwarderIn io.Reader, wg *sync.WaitGroup) {

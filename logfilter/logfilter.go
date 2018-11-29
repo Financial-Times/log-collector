@@ -2,7 +2,6 @@ package logfilter
 
 import (
 	"encoding/json"
-	"flag"
 	"io"
 	"regexp"
 	"strings"
@@ -87,17 +86,8 @@ var (
 	mc         clusterService
 )
 
-func init() {
-	flag.StringVar(&Env, "env", "dummy", "Environment tag value")
-	flag.StringVar(&DnsAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
-}
-
 // Filters & enhances the JSON log messages that come into the reader, and writes the resulted log messages to the writer.
 func Filter(r io.Reader, w io.Writer) {
-	if !flag.Parsed() {
-		flag.Parse()
-	}
-
 	mc = newMonitoredClusterService(DnsAddress, Env)
 
 	dec := json.NewDecoder(r)
