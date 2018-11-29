@@ -93,7 +93,7 @@ func init() {
 }
 
 // Filters & enhances the JSON log messages that come into the reader, and writes the resulted log messages to the writer.
-func LogFilter(r io.Reader, w io.Writer) {
+func Filter(r io.Reader, w io.Writer) {
 	if !flag.Parsed() {
 		flag.Parse()
 	}

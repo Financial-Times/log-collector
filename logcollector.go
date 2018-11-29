@@ -25,7 +25,7 @@ func main() {
 	go launchForwarder(forwarderIn, &wg)
 	go watchTerminationSignals(logFilterOut)
 
-	logfilter.LogFilter(os.Stdin, logFilterOut)
+	logfilter.Filter(os.Stdin, logFilterOut)
 	log.Println("Log filter completed")
 
 	// closing the writer will finish the forwarder
