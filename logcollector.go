@@ -13,6 +13,8 @@ import (
 	"github.com/Financial-Times/log-collector/logfilter"
 )
 
+var logsReader io.Reader
+
 func main() {
 	if !flag.Parsed() {
 		flag.Parse()
@@ -25,7 +27,11 @@ func main() {
 	go launchForwarder(forwarderIn, &wg)
 	go watchTerminationSignals(logFilterOut)
 
-	logfilter.Filter(os.Stdin, logFilterOut)
+	if logsReader == nil {
+		logsReader = os.Stdin
+	}
+
+	logfilter.Filter(logsReader, logFilterOut)
 	log.Println("Log filter completed")
 
 	// closing the writer will finish the forwarder
