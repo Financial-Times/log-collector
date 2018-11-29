@@ -2,9 +2,10 @@ package logfilter
 
 import (
 	"errors"
-	"github.com/domainr/dnsr"
 	"strings"
 	"time"
+
+	"github.com/domainr/dnsr"
 )
 
 // cacheTime time to cache the cluster status

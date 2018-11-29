@@ -86,7 +86,7 @@ func TestShouldRenameProperties(t *testing.T) {
 }
 
 func TestEnvTag(t *testing.T) {
-	environmentTag = ""
+	Env = ""
 
 	m := make(map[string]interface{})
 	munge(m, "")
@@ -95,7 +95,7 @@ func TestEnvTag(t *testing.T) {
 		t.Errorf("didn't expect to find environment %v", m["environment"])
 	}
 
-	environmentTag = "foo"
+	Env = "foo"
 
 	munge(m, "")
 

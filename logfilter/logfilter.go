@@ -82,14 +82,14 @@ var (
 )
 
 var (
-	environmentTag string
-	dnsAddress     string
-	mc             clusterService
+	Env        string
+	DnsAddress string
+	mc         clusterService
 )
 
 func init() {
-	flag.StringVar(&environmentTag, "env", "dummy", "Environment tag value")
-	flag.StringVar(&dnsAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
+	flag.StringVar(&Env, "env", "dummy", "Environment tag value")
+	flag.StringVar(&DnsAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
 }
 
 // Filters & enhances the JSON log messages that come into the reader, and writes the resulted log messages to the writer.
@@ -98,7 +98,7 @@ func Filter(r io.Reader, w io.Writer) {
 		flag.Parse()
 	}
 
-	mc = newMonitoredClusterService(dnsAddress, environmentTag)
+	mc = newMonitoredClusterService(DnsAddress, Env)
 
 	dec := json.NewDecoder(r)
 	enc := json.NewEncoder(w)
@@ -185,8 +185,8 @@ func hideAPIKeysInURLQueryParams(msg string) string {
 func munge(m map[string]interface{}, message string) {
 
 	m["platform"] = "up-k8s"
-	if environmentTag != "" {
-		m["environment"] = environmentTag
+	if Env != "" {
+		m["environment"] = Env
 	}
 
 	podName := extractPodName(m["CONTAINER_NAME"])
