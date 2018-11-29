@@ -2,13 +2,14 @@ package forwarder
 
 import (
 	"flag"
-	"github.com/stretchr/testify/assert"
 	"io"
 	"os"
 	"strings"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type s3ServiceMock struct {
