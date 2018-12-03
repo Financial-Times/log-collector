@@ -84,7 +84,7 @@ spec:
           journalctl -a -f --since="${TIME}" --output=json | \
           /log-collector -env=$ENV -workers={{ .Values.log_collector.workers }} -buffer={{ .Values.log_collector.buffer }} \
              -batchsize={{ .Values.log_collector.batchSize}} -batchtimer={{ .Values.log_collector.batchTimer }} \
-             -bucketName=$BUCKET_NAME -awsRegion=$AWS_REGION -dnsAddress=${baseDns}.ft.com
+             -bucketName=$BUCKET_NAME -awsRegion=$BUCKET_REGION -dnsAddress=${baseDns}.ft.com
         lifecycle:
           preStop:
             exec:
