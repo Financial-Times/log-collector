@@ -42,16 +42,14 @@ Here are the key parts:
     The next time the `log-collector` starts on the node, it will resume the logs from the value written in the configmap.
     The ConfigMap looks like:
 
-       ```
-       kind: ConfigMap
-       metadata:
-         name: log-collector-stop-time
-       apiVersion: v1
-       data:
-         ip-10-172-32-11.eu-west-1.compute.internal: 2018-12-03 09:14:47.268
-         ip-10-172-32-21.eu-west-1.compute.internal: 2018-12-03 09:14:07.527
-         ...
-       ```
+           kind: ConfigMap
+           metadata:
+             name: log-collector-stop-time
+           apiVersion: v1
+           data:
+             ip-10-172-32-11.eu-west-1.compute.internal: 2018-12-03 09:14:47.268
+             ip-10-172-32-21.eu-west-1.compute.internal: 2018-12-03 09:14:07.527
+             ...
 
     For details, checkout the [pre-stop lifecycle hook comand](helm/log-collector/templates/daemonset.yaml#L87) and the [container start script](helm/log-collector/templates/daemonset.yaml#L76)
 1. For being able to use `kubectl` for accomplishing the previous step, we're adding the executable to the docker image through the [Dockerfile](Dockerfile#L36).
