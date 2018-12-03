@@ -38,7 +38,7 @@ Here are the key parts:
 1. For reading the logs from journald, the `journalctl` executable is mounted in the pod from the host, together with everything else needed for accessing the logs.
    We're doing this, and not copy a specific journalctl version through the Dockerfile, in order to make sure that we're using the journalctl version that surely works from the host.
    Checkout the [deamonset start command](helm/log-collector/templates/daemonset.yaml#L84) and [mounts](helm/log-collector/templates/daemonset.yaml#L101) for details
-1. For not loosing logs from a node, whenever the pod terminates for whatever reason, the shutdown time for that node is recorded in the Config Map `log-collector-stop-time`.
+1. For not losing logs from a node, whenever the pod terminates for whatever reason, the shutdown time for that node is recorded in the Config Map `log-collector-stop-time`.
     The next time the `log-collector` starts on the node, it will resume the logs from the value written in the configmap.
     The ConfigMap looks like:
        ```
