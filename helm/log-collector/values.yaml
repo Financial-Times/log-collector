@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 service:
   name: "" # The name of the service, should be defined in the specific app-configs folder.
-  stopTimeConfigmap: "journal-log-collector-stop-time"
+  stopTimeConfigmap: "log-collector-stop-time"
 log_collector:
   batchSize: 100
   workers: 8
