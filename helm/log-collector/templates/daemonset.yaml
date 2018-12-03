@@ -26,8 +26,6 @@ spec:
     spec:
       tolerations:
       - operator: "Exists"
-      imagePullSecrets:
-      - name: nexusregistry
       terminationGracePeriodSeconds: 10
       containers:
       - name: {{ .Values.service.name }}
