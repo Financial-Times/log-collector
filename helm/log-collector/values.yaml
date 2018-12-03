@@ -15,5 +15,5 @@ resources:
   requests:
     memory: 256Mi
 image:
-  repository: nexus.in.ft.com:5000/coco/log-collector
+  repository: coco/log-collector
   pullPolicy: IfNotPresent
