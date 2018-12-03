@@ -30,7 +30,7 @@ spec:
       - name: nexusregistry
       terminationGracePeriodSeconds: 10
       containers:
-      - name: collector
+      - name: {{ .Values.service.name }}
         image: "{{ .Values.image.repository }}:{{ .Chart.Version }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
