@@ -41,6 +41,7 @@ Here are the key parts:
 1. For not losing logs from a node, whenever the pod terminates for whatever reason, the shutdown time for that node is recorded in the Config Map `log-collector-stop-time`.
     The next time the `log-collector` starts on the node, it will resume the logs from the value written in the configmap.
     The ConfigMap looks like:
+
        ```
        kind: ConfigMap
        metadata:
@@ -51,6 +52,7 @@ Here are the key parts:
          ip-10-172-32-21.eu-west-1.compute.internal: 2018-12-03 09:14:07.527
          ...
        ```
+
     For details, checkout the [pre-stop lifecycle hook comand](helm/log-collector/templates/daemonset.yaml#L87) and the [container start script](helm/log-collector/templates/daemonset.yaml#L76)
 1. For being able to use `kubectl` for accomplishing the previous step, we're adding the executable to the docker image through the [Dockerfile](Dockerfile#L36).
     We don't need any other additional setup (kubeconfig file) for being able to run `kubectl` commands from inside the pod.
