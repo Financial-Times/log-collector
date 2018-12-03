@@ -22,7 +22,7 @@ spec:
         app: {{ .Values.service.name }}
 # todo [sb] check if we can use IAM roles instead of the user        
 #      annotations:
-#        iam.amazonaws.com/role: thanos-s3-access-role
+#        iam.amazonaws.com/role: [[s3 access role]]
     spec:
       tolerations:
       - operator: "Exists"
