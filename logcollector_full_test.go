@@ -42,7 +42,7 @@ func init() {
 	}
 
 	logfilter.Env = forwarder.Env
-	logfilter.DnsAddress = "dummy"
+	logfilter.DNSAddress = "dummy"
 }
 
 var logEntry = `

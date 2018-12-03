@@ -82,13 +82,13 @@ var (
 
 var (
 	Env        string
-	DnsAddress string
+	DNSAddress string
 	mc         clusterService
 )
 
 // Filters & enhances the JSON log messages that come into the reader, and writes the resulted log messages to the writer.
 func Filter(r io.Reader, w io.Writer) {
-	mc = newMonitoredClusterService(DnsAddress, Env)
+	mc = newMonitoredClusterService(DNSAddress, Env)
 
 	dec := json.NewDecoder(r)
 	enc := json.NewEncoder(w)

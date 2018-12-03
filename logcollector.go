@@ -23,7 +23,7 @@ func init() {
 	flag.IntVar(&forwarder.Batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to S3")
 	flag.StringVar(&forwarder.Bucket, "bucketName", "", "S3 Bucket for caching failed events")
 	flag.StringVar(&forwarder.AwsRegion, "awsRegion", "", "AWS region for S3")
-	flag.StringVar(&logfilter.DnsAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
+	flag.StringVar(&logfilter.DNSAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
 }
 
 func main() {
