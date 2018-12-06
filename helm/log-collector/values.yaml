@@ -11,9 +11,11 @@ log_collector:
   batchTimer: 5
 resources:
   limits:
-    memory: 512Mi
+    memory: 80Mi
+    cpu: 500m
   requests:
-    memory: 256Mi
+    memory: 35Mi
+    cpu: 60m
 image:
   repository: coco/log-collector
   pullPolicy: IfNotPresent
