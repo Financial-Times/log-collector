@@ -62,7 +62,6 @@ func validateConfig() {
 
 func launchForwarder(forwarderIn io.Reader, wg *sync.WaitGroup) {
 	forwarder.Forward(forwarderIn)
-	log.Println("Forwarder completed")
 	wg.Done()
 }
 

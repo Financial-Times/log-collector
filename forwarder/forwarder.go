@@ -47,6 +47,7 @@ func Forward(r io.Reader) {
 
 	logDispatch = NewDispatch(Bucket, AwsRegion, Env)
 	logDispatch.Start()
+	defer log.Println("Forwarder completed")
 
 	for {
 		//1. Check whether timer has expired or Batchsize exceeded before processing new string
