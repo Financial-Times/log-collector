@@ -3,7 +3,8 @@
 [![Circle CI](https://circleci.com/gh/Financial-Times/log-collector/tree/master.png?style=shield)](https://circleci.com/gh/Financial-Times/log-collector/tree/master)[![Go Report Card](https://goreportcard.com/badge/github.com/Financial-Times/log-collector)](https://goreportcard.com/report/github.com/Financial-Times/log-collector) [![Coverage Status](https://coveralls.io/repos/github/Financial-Times/log-collector/badge.svg)](https://coveralls.io/github/Financial-Times/log-collector)
 
 ## Introduction
-The `log-collector` is a golang application that fetches JSON log messages from stdin, filters and enrich them and then forwards them to S3 in order to be processed by the `resilient-splunk-forwarder`.
+The `log-collector` is a golang application that fetches JSON log messages from stdin, filters and enriches them and then forwards them to S3 in order to be processed by
+the [resilient-splunk-forwarder](https://github.com/Financial-Times/resilient-splunk-forwarder).
 Docker image builds a container that stores the journalctl logs to S3.
 
 ## Building
