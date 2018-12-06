@@ -9,8 +9,8 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/Financial-Times/log-collector/filter"
 	"github.com/Financial-Times/log-collector/forwarder"
-	"github.com/Financial-Times/log-collector/logfilter"
 )
 
 var logsReader io.Reader
@@ -23,14 +23,14 @@ func init() {
 	flag.IntVar(&forwarder.Batchtimer, "batchtimer", 5, "Expiry in seconds after which delivering events to S3")
 	flag.StringVar(&forwarder.Bucket, "bucketName", "", "S3 Bucket where all the log events will be forwarded and stored")
 	flag.StringVar(&forwarder.AwsRegion, "awsRegion", "", "AWS region for S3")
-	flag.StringVar(&logfilter.DNSAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
+	flag.StringVar(&filter.DNSAddress, "dnsAddress", "", "The DNS entry of the full cluster, in case this env is regional. Example upp-prod-delivery.ft.com")
 }
 
 func main() {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
-	logfilter.Env = forwarder.Env
+	filter.Env = forwarder.Env
 	validateConfig()
 
 	forwarderIn, logFilterOut := io.Pipe()
@@ -44,7 +44,7 @@ func main() {
 		logsReader = os.Stdin
 	}
 
-	logfilter.Filter(logsReader, logFilterOut)
+	filter.Filter(logsReader, logFilterOut)
 	log.Println("Log filter completed")
 
 	// closing the writer will finish the forwarder

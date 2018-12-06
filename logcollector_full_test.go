@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/Financial-Times/log-collector/filter"
 	"github.com/Financial-Times/log-collector/forwarder"
-	"github.com/Financial-Times/log-collector/logfilter"
 )
 
 type s3ServiceMock struct {
@@ -41,8 +41,8 @@ func init() {
 		return s3Mock, nil
 	}
 
-	logfilter.Env = forwarder.Env
-	logfilter.DNSAddress = "dummy"
+	filter.Env = forwarder.Env
+	filter.DNSAddress = "dummy"
 }
 
 var logEntry = `
