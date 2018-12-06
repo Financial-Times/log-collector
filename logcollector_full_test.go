@@ -98,10 +98,10 @@ func Test_FullCollector(t *testing.T) {
 	}
 
 	s3Mock.RLock()
-	l := len(s3Mock.cache)
+	s3Len := len(s3Mock.cache)
 	s3Mock.RUnlock()
 
-	assert.Equal(t, messageCount/forwarder.Batchsize, l)
+	assert.Equal(t, messageCount/forwarder.Batchsize, s3Len)
 }
 
 func waitTimeout(wg *sync.WaitGroup, timeout time.Duration) bool {
