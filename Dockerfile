@@ -31,7 +31,7 @@ COPY --from=0 /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=0 /artifacts/* /
 
 # Adding the utilities need for running journalctl & kubectl from inside the container.
-# This version has to be combatible with the one running on the clusters, that is configured here: https://github.com/Financial-Times/content-k8s-provisioner/blob/master/ansible/vars/defaults.yaml#L3
+# This version has to be compatible with the one running on the clusters, that is configured here: https://github.com/Financial-Times/content-k8s-provisioner/blob/master/ansible/vars/defaults.yaml#L3
 ENV KUBECTL_VERSION="v1.11.0"
 
 ADD https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl /usr/local/bin/kubectl
