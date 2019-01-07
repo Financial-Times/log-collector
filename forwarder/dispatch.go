@@ -1,4 +1,4 @@
-package main
+package forwarder
 
 import (
 	"log"
@@ -23,8 +23,8 @@ func NewDispatch(bucketName string, awsRegion string, prefix string) Dispatch {
 }
 
 func (logDispatch *dispatch) Start() {
-	logDispatch.inChan = make(chan string, chanBuffer)
-	for i := 0; i < workers; i++ {
+	logDispatch.inChan = make(chan string, ChanBuffer)
+	for i := 0; i < Workers; i++ {
 		logDispatch.wg.Add(1)
 		go func() {
 			defer logDispatch.wg.Done()

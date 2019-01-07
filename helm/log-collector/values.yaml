@@ -1,0 +1,21 @@
+# Default values for upp-journal-log-collector.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+service:
+  name: "" # The name of the service, should be defined in the specific app-configs folder.
+  stopTimeConfigmap: "log-collector-stop-time"
+log_collector:
+  batchSize: 100
+  workers: 8
+  buffer: 256
+  batchTimer: 5
+resources:
+  limits:
+    memory: 80Mi
+    cpu: 500m
+  requests:
+    memory: 35Mi
+    cpu: 60m
+image:
+  repository: coco/log-collector
+  pullPolicy: IfNotPresent

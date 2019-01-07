@@ -1,4 +1,4 @@
-package main
+package forwarder
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ type s3Service struct {
 }
 
 var NewS3Service = func(bucketName string, awsRegion string, prefix string) (S3Service, error) {
-	wrks := workers
+	wrks := Workers
 	spareWorkers := 1
 
 	hc := &http.Client{
