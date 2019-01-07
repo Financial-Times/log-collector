@@ -45,7 +45,6 @@ func main() {
 	}
 
 	filter.Filter(logsReader, logFilterOut)
-	log.Println("Log filter completed")
 
 	// closing the writer will finish the forwarder
 	closeWriter(logFilterOut)

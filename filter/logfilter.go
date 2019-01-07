@@ -3,6 +3,7 @@ package filter
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"regexp"
 	"strings"
 )
@@ -88,6 +89,8 @@ var (
 
 // Filters & enhances the JSON log messages that come into the reader, and writes the resulted log messages to the writer.
 func Filter(r io.Reader, w io.Writer) {
+	defer log.Println("Log filter completed")
+
 	mc = newMonitoredClusterService(DNSAddress, Env)
 
 	dec := json.NewDecoder(r)
