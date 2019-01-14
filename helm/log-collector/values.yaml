@@ -11,7 +11,7 @@ log_collector:
   batchTimer: 5
 resources:
   limits:
-    memory: 80Mi
+    memory: 100Mi
     cpu: 500m
   requests:
     memory: 35Mi
