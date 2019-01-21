@@ -40,7 +40,6 @@ var (
 	blacklistedUnits = map[string]bool{
 		"log-collector.service":      true,
 		"logstash-forwarder.service": true,
-		"kubelet.service":            true,
 		"flanneld.service":           true,
 	}
 
