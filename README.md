@@ -56,3 +56,8 @@ Here are the key parts:
 1. For being able to use `kubectl` for accomplishing the previous step, we're adding the executable to the docker image through the [Dockerfile](Dockerfile#L36).
     We don't need any other additional setup (kubeconfig file) for being able to run `kubectl` commands from inside the pod.
 
+### Benchmarks and profiling
+
+`go test -run=Bench -bench=Process ./filter -benchtime=10s  -cpuprofile profile_process.out`
+
+`go tool pprof -http=":8081" profile_process.out`

@@ -10,6 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var boolResult bool
+var stringResult string
+
 func TestFixBytesToString(t *testing.T) {
 	// happy path
 	input := []interface{}{float64('A'), float64('B')}
@@ -322,6 +325,28 @@ func TestBypassWithoutAPIKeysInURLQueryParams(t *testing.T) {
 	expectedMsg := `10.2.26.0 ops-17-01-2018 30/Jan/2018:08:35:04 /content/notifications-push?type=ALL 200 -2147483648 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36" transaction_id=- miss`
 	actualMsg := hideAPIKeysInURLQueryParams(msgWithoutAPIKey)
 	assert.Equal(t, expectedMsg, actualMsg)
+}
+
+func BenchmarkProcessMessage(b *testing.B) {
+	b.ReportAllocs()
+	b.StopTimer()
+	var processed bool
+	m := make(map[string]interface{})
+	json.NewDecoder(strings.NewReader(msgWithContainerName("foobar"))).Decode(&m)
+	b.StartTimer()
+	for n := 0; n < b.N; n++ {
+		processed = processMessage(m)
+	}
+	boolResult = processed
+}
+
+func BenchmarkExtractServiceName(b *testing.B){
+	b.ReportAllocs()
+	var r string
+	for n:=0; n < b.N; n++{
+		r = extractServiceName("k8s_not-black_not-black-79d574774-2rxrj_kube-system_a093cbca-fb5a-11e7-a6b6-06263dd4a414_6")
+	}
+	stringResult = r
 }
 
 func msgWithContainerName(service string) string {

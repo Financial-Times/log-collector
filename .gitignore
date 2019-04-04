@@ -3,3 +3,6 @@
 .project
 /log-collector*
 vendor/*/
+*out
+*exe
+*xml
