@@ -58,6 +58,26 @@ Here are the key parts:
 
 ### Benchmarks and profiling
 
-`go test -run=Bench -bench=Process ./filter -benchtime=10s  -cpuprofile profile_process.out`
+- [Benchmarks 101](https://dave.cheney.net/2013/06/30/how-to-write-benchmarks-in-go)
+- run the benchmarks only, no tests: `go test -run=XXX -bench=. ./filter`
+  - `XXX` - a regex that no test will match
+  - `.` - a regex that all the benchmarks will match
+  - `./filter`  - where to look for the benchmarks
 
-`go tool pprof -http=":8081" profile_process.out`
+```
+BenchmarkProcessMessage-8          10000            417242 ns/op
+PASS
+ok      github.com/Financial-Times/log-collector/filter 8.991s
+```
+- example result:
+  - `BenchmarkProcessMessage-8` - name of the benchmark and the number of CPUs it runs on
+  - `10000` - how many times the benchmark ran
+  -  `417242 ns/op` - average run time of the function under test
+
+- run all tests and benchmarks in the project: `go test  -bench=. ./...`
+- run one benchmark only: `go test -run=XXX -bench=ProcessMessage ./filter`
+- run enough iterations of the benchmark to take 5s: `go test -run=XXX -bench=ProcessMessage ./filter -benchtime 5s`
+- write a CPU profile: `go test -run=XXX -bench=ProcessMessage ./filter -benchtime 5s -cpuprofile cpu.out`
+- install [http://www.graphviz.org/download/](Graphwiz) if you want to examine the CPU profile graphically
+- examine the CPU profile: `go tool pprof -http=":8081" cpu.out` - this opens a browser, go to View -> Flamegraph for the flamegraph
+
