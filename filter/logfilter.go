@@ -50,6 +50,7 @@ var (
 		"kube-resources-autosave-dumper": true,
 		"resilient-splunk-forwarder":     true,
 		"coco-diamond":                   true,
+		"kube-node-drainer":			  true,	
 	}
 
 	blacklistedStrings = []string{
@@ -61,6 +62,8 @@ var (
 		// this is extensively logged by the kubelet.service when mounting the volume
 		// holding the default token for the service account.
 		"MountVolume.SetUp succeeded for volume",
+		//Logged by kiam-agent
+		"processed request",
 	}
 
 	blacklistedSyslogIds = map[string]bool{
