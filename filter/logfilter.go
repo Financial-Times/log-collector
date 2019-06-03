@@ -198,7 +198,7 @@ func munge(m map[string]interface{}, message string) {
 	}
 
 	ent, ok, format := extract(message)
-	if !ok {
+	if !ok || m["MESSAGE"] == "" {
 		return
 	}
 
@@ -217,7 +217,7 @@ func munge(m map[string]interface{}, message string) {
 	}
 
 	//avoid field duplication and empty messages
-	if format == "json" || m["MESSAGE"] == "" {
+	if format == "json" {
 		delete(m, "MESSAGE")
 	}
 
