@@ -216,7 +216,7 @@ func munge(m map[string]interface{}, message string) {
 		m[k] = v
 	}
 
-	//avoid field duplication
+	//avoid field duplication and empty messages
 	if format == "json" || m["MESSAGE"] == "" {
 		delete(m, "MESSAGE")
 	}
